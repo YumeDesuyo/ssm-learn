@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace ：对应的mapper接口 -->
+<mapper namespace="com.yume.mybatis.mapper.UserMapper">
+
+    <!--
+    mapper接口和映射文件按要保持两个一致：
+    1、mapper接口的全类名和映射文件的namespace保持一致
+    2、mapper接口中的方法的方法名要个映射文件中的sql的id保持一致
+    -->
+
+    <!--id : 对应接口的方法名称-->
+
+    <!--    int insertUser-->
+    <insert id="insertUser">
+        insert into t_user value (NULL, '张三', '123456', 24, '男', '1@1.c')
+    </insert>
+
+    <!--    int updateUser();-->
+    <update id="updateUser">
+        update t_user
+        set username='yume',
+            password='666'
+        where id = 1
+    </update>
+
+    <!--    int deleteUser-->
+    <delete id="deleteUser">
+        delete
+        from t_user
+        where id = 3
+    </delete>
+
+    <!--    User selectUserById();-->
+    <select id="selectUserById" resultType="User">
+        select *
+        from t_user
+        where id = 1
+    </select>
+
+    <!--    List<User> selectAllUser();-->
+    <select id="selectAllUser" resultType="User">
+        select *
+        from t_user
+    </select>
+
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace ：对应的mapper接口 -->
+<mapper namespace="com.yume.mybatis.mapper.DynamicSQL">
+
+    <!--List<Emp> getEmpByEmpId(@Param("emp") Emp emp);-->
+    <select id="getEmpByEmpId" resultType="Emp">
+        select *
+        from t_emp
+        <trim prefix="where" suffixOverrides="and">
+            <if test="empId != null and empId != ''">
+                emp_id = '${empId}' and
+            </if>
+            <if test="empName != null and empName != ''">
+                emp_name = '${empName}' and
+            </if>
+            <if test="empAge != null and empAge != ''">
+                emp_age = '${empAge}' and
+            </if>
+            <if test="empGender != null and empGender != ''">
+                emp_gender = '${empGender}'
+            </if>
+        </trim>
+    </select>
+
+    <select id="getEmpByEmpIdTwo" resultType="Emp">
+        select *
+        from t_emp
+        <where>
+            <if test="empId != null and empId != ''">
+                emp_id = '${empId}'
+            </if>
+            <if test="empName != null and empName != ''">
+                and emp_name = '${empName}'
+            </if>
+            <if test="empAge != null and empAge != ''">
+                and emp_age = '${empAge}'
+            </if>
+            <if test="empGender != null and empGender != ''">
+                and emp_gender = '${empGender}'
+            </if>
+        </where>
+    </select>
+
+    <select id="getEmpByEmpIdOne" resultType="Emp">
+        select *
+        from t_emp
+        where true
+        <if test="empName != null and empName != ''">
+            and emp_name = #{empName}
+        </if>
+        <if test="empName != null and empName != ''">
+            and emp_age = #{empAge}
+        </if>
+        <if test="empAge != null and empAge != ''">
+            and emp_gender = #{empGender}
+        </if>
+    </select>
+
+    <!--int insertMoreEmps(@Param("empList") List<Emp> list);-->
+    <insert id="insertMoreEmps">
+        insert into t_emp values
+        <foreach collection="empList" item="emp" separator=",">
+            (null, #{emp.empName}, #{emp.empAge}, #{emp.empGender}, null)
+        </foreach>
+    </insert>
+
+    <!--    int deleteEmpsById(@Param("empId") Integer[] empId);-->
+    <delete id="deleteEmpsById">
+        delete from t_emp where emp_id in
+            <foreach collection="empId" item="empId" separator="," open="(" close=")">
+                #{empId}
+            </foreach>
+    </delete>
+
+</mapper>

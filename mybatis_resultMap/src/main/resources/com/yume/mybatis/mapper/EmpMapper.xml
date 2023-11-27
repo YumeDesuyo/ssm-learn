@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace ：对应的mapper接口 -->
+<mapper namespace="com.yume.mybatis.mapper.EmpMapper">
+
+    <resultMap id="empResultMap" type="emp">
+        <id column="emp_id" property="empId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="emp_age" property="empAge"/>
+        <result column="emp_gender" property="empGender"/>
+<!--        <result column="dept_id" property="deptId"/>-->
+    </resultMap>
+
+    <!--    Emp selectEmpById(@Param("empId") int empId);-->
+    <select id="selectEmpById" resultMap="empResultMap">
+        select *
+        from t_emp
+        where emp_id = #{empId}
+    </select>
+
+    <select id="selectEmpByIdOld" resultType="Emp">
+        <!--
+        select emp_id empId, emp_name empname, emp_age emAge, emp_gender empGender, dept_id deptId
+        from t_emp
+        where emp_id = #{empId}
+        -->
+        select * from t_emp where emp_id = #{empId}
+    </select>
+
+    <resultMap id="EmpAndDeptResultMap" type="Emp">
+        <id column="emp_id" property="empId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="emp_age" property="empAge"/>
+        <result column="emp_gender" property="empGender"/>
+        <!--
+        1、级联查询
+        <result column="dept_id" property="dept.deptId"></result>
+        <result column="dept_name" property="dept.deptName"></result>
+        -->
+        <!--
+        2、association
+        -->
+        <association property="dept" column="Dept">
+            <id column="dept_id" property="deptId"/>
+            <result column="dept_name" property="deptName"/>
+        </association>
+    </resultMap>
+    <!--    Emp selectEmpAndDeptById(@Param("empId") int empId);-->
+    <select id="selectEmpAndDeptById" resultMap="EmpAndDeptResultMap">
+        select *
+        from t_emp
+                 left join t_dept td on t_emp.emp_id = td.dept_id
+        where t_emp.emp_id = #{empId}
+    </select>
+
+    <resultMap id="selectEmpAndDeptByStep" type="Emp">
+        <id column="emp_id" property="empId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="emp_age" property="empAge"/>
+        <result column="emp_gender" property="empGender"/>
+        <association property="dept"
+                     select="com.yume.mybatis.mapper.DeptMapper.selectEmpAndDeptByStepTwo"
+                     column="dept_id">
+        </association>
+    </resultMap>
+    <!--    Emp selectEmpAndDeptByStepOne(@Param("empId") int empId);-->
+    <select id="selectEmpAndDeptByStepOne" resultMap="selectEmpAndDeptByStep">
+        select *
+        from t_emp
+        where emp_id = #{empId}
+    </select>
+
+    <!--    Emp getDeptAndEmpByStepTwo(@Param("deptId") int deptId);-->
+    <select id="getDeptAndEmpByStepTwo" resultType="Emp">
+        select *from t_emp where dept_id = #{deptId}
+    </select>
+
+</mapper>

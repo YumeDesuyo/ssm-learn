@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace ：对应的mapper接口 -->
+<mapper namespace="com.yume.mybatis.mapper.SelectMapper">
+
+    <!--    User selectUsrById(@Param("id") int id);-->
+    <select id="selectUsrById" resultType="User">
+        select *
+        from t_user
+        where id = #{id}
+    </select>
+
+    <!--    List<User> selectAllUser();-->
+    <select id="selectAllUser" resultType="User">
+        select *
+        from t_user
+    </select>
+
+    <!--    Integer selectCount();-->
+    <select id="selectCount" resultType="int">
+        select count(*)
+        from t_user
+    </select>
+
+    <!--    Map selectUserByIdToMap(@Param("id") Integer id);-->
+    <select id="selectUserByIdToMap" resultType="map">
+        select *
+        from t_user
+        where id = #{id}
+    </select>
+
+    <!--    List<Map> selectAllUserToList();-->
+    <select id="selectAllUserToList" resultType="map">
+        select * from t_user
+    </select>
+</mapper>

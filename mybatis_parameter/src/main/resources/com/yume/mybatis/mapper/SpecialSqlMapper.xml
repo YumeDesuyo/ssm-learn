@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace ：对应的mapper接口 -->
+<mapper namespace="com.yume.mybatis.mapper.SpecialSqlMapper">
+
+    <!--    List<User> selectUserByLike(@Param("Like") String username);-->
+    <select id="selectUserByLike" resultType="User">
+        <!-- select * from t_user where username like "%"#{Like}"%" -->
+        select * from t_user where username like '%${Like}%'
+        <!-- select * from t_user where username like concat('%', #{Like}, '%') -->
+    </select>
+
+    <!--    int deleteMoreUserByIds(@Param("ids") String ids);-->
+    <delete id="deleteMoreUserByIds">
+        delete
+        from t_user
+        where id in (${ids})
+    </delete>
+
+    <!--    List<User> selectUsers(@Param("tableName") String tableName);-->
+    <select id="selectUsers" resultType="user">
+        select *
+        from ${tableName}
+    </select>
+
+    <!--    User selectUser(@Param("tableName") String tableName, @Param("userName") String userName);-->
+    <select id="selectUser" resultType="User">
+        select *
+        from ${tableName}
+        where username = '${userName}'
+    </select>
+
+    <!--    int insertUser(User user);-->
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+        insert into t_user value (null, #{username}, #{password}, #{age}, #{gender}, #{email})
+    </insert>
+</mapper>
